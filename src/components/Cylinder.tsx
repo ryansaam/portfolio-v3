@@ -1,5 +1,11 @@
 import React from "react"
 
+export interface CylinderData {
+  backgroundColor: string
+  img: string
+  desc: string
+}
+
 interface CylinderProps {
   backgroundColor: string
   width: number

@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import './App.css';
 
-import Revolver, { CylinderData } from './components/Revolver/'
+import Revolver from './components/Revolver/'
+import Cylinder, { CylinderData } from "./components/Cylinder"
 
 interface BrandBarSpanProps {
-  children: ReactNode,
+  children: React.ReactNode,
   fontSize?: string,
   fontWeight?: number
 }
@@ -95,18 +96,28 @@ function App() {
     <div className="App">
       <h1>EXPLORE My Cool Text 2109</h1>
       <BrandBar />
-      <Revolver
-        style={{
-          position: "absolute",
-          top: "0px",
-          left: "0px",
-          // transform: "translateX(-50%)"
-        }}
-        radius={100}
-        cylinderData={data}
-        cylinderWidth={300}
-        cylinderHeight={150}
-      />
+      <div style={{width: "500px", height: "350px", position: "relative"}}>
+        <Revolver
+          style={{
+            position: "absolute",
+            top: "0px",
+            left: "0px",
+            // transform: "translateX(-50%)"
+          }}
+          radius={100}
+        >
+          {
+            data.map((obj, index) => {
+              return <Cylinder
+                        key={index}
+                        backgroundColor={obj.backgroundColor}
+                        // width={300} height={150}
+                        width={80 * (index+1)} height={80 * (index+1)}
+                      />
+            })
+          }
+        </Revolver>
+      </div>
     </div>
   );
 }
