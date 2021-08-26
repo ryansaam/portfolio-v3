@@ -4,10 +4,11 @@ import useRevolverAnimation from "./useRevolverAnimation"
 
 interface RevolverProps {
   radius: number
+  cycle?: number
   style?: React.CSSProperties
   children: React.ReactElement[]
 }
-const Revolver = ({ radius, style, children }: RevolverProps) => {
+const Revolver = React.forwardRef<HTMLDivElement, RevolverProps>(({ radius, cycle, style, children }, ref) => {
   const [cylinderMaxWidth, setCylinderMaxWidth] = useState(0)
   const [cylinderMaxHeight, setCylinderMaxHeight] = useState(0)
 
@@ -15,7 +16,7 @@ const Revolver = ({ radius, style, children }: RevolverProps) => {
   const containerWidth = (radius + (cylinderMaxWidth / 2)) * 2
   const containerHeight = (radius + (cylinderMaxHeight / 2)) * 2
 
-  useRevolverAnimation(cylinderRefs, radius, [containerWidth, containerHeight])
+  useRevolverAnimation(cylinderRefs, radius, [containerWidth, containerHeight], cycle)
 
   useEffect(() => {
     cylinderRefs.current = cylinderRefs.current.slice(0, children.length)
@@ -31,11 +32,11 @@ const Revolver = ({ radius, style, children }: RevolverProps) => {
  }, [children, cylinderMaxWidth, cylinderMaxHeight])
 
   return (
-    <div style={{...style}}>
+    <div ref={ref} style={{...style}}>
       <div style={{ width: `${containerWidth}px`, height: `${containerHeight}px`, position: "relative" }} >
         {
           React.Children.map(children, (child, index) =>
-            React.cloneElement(child, {
+            React.cloneElement(child as React.ReactElement<any>, {
               ref: (ref: HTMLElement | null) => (cylinderRefs.current[index] = ref)
             })
           )
@@ -43,6 +44,6 @@ const Revolver = ({ radius, style, children }: RevolverProps) => {
       </div>
     </div>
   )
-}
+})
 
 export default Revolver
